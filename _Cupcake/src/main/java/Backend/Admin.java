@@ -52,6 +52,21 @@ public class Admin extends HttpServlet {
         if (change != null) {
             User foundUser = UserMapper.receiveUser(change);
 
+            if (foundUser == null) {
+
+                searched = false;
+
+                ArrayList<Order> orders = OrderMapper.loadOrders();
+                ArrayList<User> users = UserMapper.loadUsers();
+
+                request.setAttribute("orders", orders);
+                request.setAttribute("users", users);
+
+                request.removeAttribute("searched");
+                request.setAttribute("searched", searched);
+                request.getServletContext().getRequestDispatcher("/admin.jsp").forward(request, response);
+            }
+
             ArrayList<Order> Orders = OrderMapper.loadOrders();
 
             int amountOfOrders = 0;
@@ -86,6 +101,21 @@ public class Admin extends HttpServlet {
                 searchedUser = UserMapper.receiveUser(findUser);
             } else {
                 searchedUser = UserMapper.receiveUserById(Integer.parseInt(findUser));
+            }
+
+            if (searchedUser == null) {
+
+                searched = false;
+
+                ArrayList<Order> orders = OrderMapper.loadOrders();
+                ArrayList<User> users = UserMapper.loadUsers();
+
+                request.setAttribute("orders", orders);
+                request.setAttribute("users", users);
+
+                request.removeAttribute("searched");
+                request.setAttribute("searched", searched);
+                request.getServletContext().getRequestDispatcher("/admin.jsp").forward(request, response);
             }
 
             ArrayList<Order> Orders = OrderMapper.loadOrders();
@@ -143,9 +173,10 @@ public class Admin extends HttpServlet {
         }
 
         int deleteUser = 0;
-        deleteUser = Integer.parseInt(request.getParameter("delete-user"));
+        deleteUser = Integer.parseInt(request.getParameter("delete-user").trim());
 
         if (deleteUser != 0) {
+
             UserMapper.removeUser(deleteUser);
 
             searched = false;

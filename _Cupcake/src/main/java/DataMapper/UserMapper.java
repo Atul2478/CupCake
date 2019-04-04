@@ -1,7 +1,6 @@
 package DataMapper;
 
 import DB.Connector;
-import Model.Order;
 import Model.User;
 
 import java.sql.Connection;
@@ -15,35 +14,38 @@ public class UserMapper {
     public static User receiveUser(String emails) {
 
         User tempUser = null;
-        Connection con = null;
-        PreparedStatement ps = null;
-        String sql = null;
-        try {
-            con = Connector.connection();
-            sql = "select * from user where email = ?";
-            ps = con.prepareStatement(sql);
 
-            ps.setString(1, emails);
+        if (emails != null) {
+            Connection con = null;
+            PreparedStatement ps = null;
+            String sql = null;
+            try {
+                con = Connector.connection();
+                sql = "select * from user where email = ?";
+                ps = con.prepareStatement(sql);
 
-            ResultSet resultSet = ps.executeQuery();
+                ps.setString(1, emails);
 
-            while(resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String username = resultSet.getString("username");
-                String password = resultSet.getString("password");
-                int permission = resultSet.getInt("permission");
-                String nyEmail = resultSet.getString("email");
-                Double balance = resultSet.getDouble("balance");
+                ResultSet resultSet = ps.executeQuery();
 
-                tempUser = new User(id, username, password, permission, nyEmail, balance);
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String username = resultSet.getString("username");
+                    String password = resultSet.getString("password");
+                    int permission = resultSet.getInt("permission");
+                    String nyEmail = resultSet.getString("email");
+                    Double balance = resultSet.getDouble("balance");
 
-                return tempUser;
+                    tempUser = new User(id, username, password, permission, nyEmail, balance);
+
+                    return tempUser;
+                }
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return tempUser;
@@ -52,35 +54,38 @@ public class UserMapper {
     public static User receiveUserById(int searchId) {
 
         User tempUser = null;
-        Connection con = null;
-        PreparedStatement ps = null;
-        String sql = null;
-        try {
-            con = Connector.connection();
-            sql = "select * from user where id = ?";
-            ps = con.prepareStatement(sql);
 
-            ps.setInt(1, searchId);
+        if (searchId != 0) {
+            Connection con = null;
+            PreparedStatement ps = null;
+            String sql = null;
+            try {
+                con = Connector.connection();
+                sql = "select * from user where id = ?";
+                ps = con.prepareStatement(sql);
 
-            ResultSet resultSet = ps.executeQuery();
+                ps.setInt(1, searchId);
 
-            while(resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String username = resultSet.getString("username");
-                String password = resultSet.getString("password");
-                int permission = resultSet.getInt("permission");
-                String nyEmail = resultSet.getString("email");
-                Double balance = resultSet.getDouble("balance");
+                ResultSet resultSet = ps.executeQuery();
 
-                tempUser = new User(id, username, password, permission, nyEmail, balance);
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String username = resultSet.getString("username");
+                    String password = resultSet.getString("password");
+                    int permission = resultSet.getInt("permission");
+                    String nyEmail = resultSet.getString("email");
+                    Double balance = resultSet.getDouble("balance");
 
-                return tempUser;
+                    tempUser = new User(id, username, password, permission, nyEmail, balance);
+
+                    return tempUser;
+                }
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return tempUser;
